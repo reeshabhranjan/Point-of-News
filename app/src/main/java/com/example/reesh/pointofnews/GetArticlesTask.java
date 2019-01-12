@@ -5,11 +5,19 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
+
+    private ArrayAdapter articleAdapter;
+
+    public void setArticleAdapter(ArrayAdapter articleAdapter) {
+        this.articleAdapter = articleAdapter;
+    }
+
     public ArrayList<Article> getArticles() {
         return articles;
     }
@@ -47,7 +55,7 @@ public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
             }
         }
 
-        ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
+//        ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
 
         listView.setAdapter(articleAdapter);
 

@@ -1,15 +1,12 @@
 package com.example.reesh.pointofnews;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -63,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 searchQuery= new ArrayList<String> (Arrays.asList(searchView.getQuery().toString().split("\\+")));
                 getArticlesTask=new GetArticlesTask();
                 getArticlesTask.setListView(listView);
+                ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
+                getArticlesTask.setArticleAdapter(articleAdapter);
                 articles=getArticlesTask.getArticles();
                 getArticlesTask.execute(searchQuery);
                 return true;
@@ -82,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void download(String url){
+    public void download(String url,String name){
+        final String name2=name;
         Picasso.with(MainActivity.getContext())
                 .load(url)
                 .into(new Target() {
@@ -90,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         try {
                             String root=Environment.getExternalStorageDirectory().toString();
-                            File myDir=new File(root+"/PoN");
+                            File myDir=new File(root+"/PointOfNews");
 
                             if(!myDir.exists()){
                                 myDir.mkdir();
                             }
 
-                            String name="hello2.jpg";
-                            myDir=new File(myDir,name);
+//                            String name="hello2.jpg";
+                            myDir=new File(myDir,name2);
                             FileOutputStream out=new FileOutputStream(myDir);
                             bitmap.compress(Bitmap.CompressFormat.JPEG,90,out);
                             out.flush();

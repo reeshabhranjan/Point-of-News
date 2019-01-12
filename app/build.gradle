@@ -34,4 +34,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.aylien.newsapi:client:0.5.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.aylien.textapi:client:0.7.0'
 }
