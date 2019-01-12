@@ -21,6 +21,14 @@ public class Article {
         this.imageName=imageName;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
     public int getVerdictLogoResourceId() {
         return verdictLogoResourceId;
     }

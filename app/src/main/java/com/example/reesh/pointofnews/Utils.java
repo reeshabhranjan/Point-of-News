@@ -117,7 +117,7 @@ public class Utils {
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
                 System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
-                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
+                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+".jpg");
                 articles.add(article);
 //                getRelatedPages(article);
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());

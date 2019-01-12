@@ -7,16 +7,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
 
-    private ArrayAdapter articleAdapter;
-
-    public void setArticleAdapter(ArrayAdapter articleAdapter) {
-        this.articleAdapter = articleAdapter;
-    }
+//    private ArrayAdapter articleAdapter;
+//
+//    public void setArticleAdapter(ArrayAdapter articleAdapter) {
+//        this.articleAdapter = articleAdapter;
+//    }
 
     public ArrayList<Article> getArticles() {
         return articles;
@@ -53,9 +54,14 @@ public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
                     article.setVerdictLogoResourceId(R.drawable.baseline_sentiment_very_dissatisfied_24);
                     break;
             }
+
+            MainActivity.download(article.getImageURL(),article.getImageName());
+            System.out.println(article.getImageURL()+" "+article.getImageName());
         }
 
-//        ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
+//        MainActivity.download("https://developer.chrome.com/extensions/examples/api/idle/idle_simple/sample-128.png","sample");
+
+        ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
 
         listView.setAdapter(articleAdapter);
 
