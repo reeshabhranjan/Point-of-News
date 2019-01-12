@@ -85,7 +85,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
-    private static ArrayList<Article> getArticles(ArrayList<String> keywords) {
+    public static ArrayList<Article> getArticles(ArrayList<String> keywords) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
 
         // Configure API key authorization: app_id
@@ -116,8 +116,11 @@ public class Utils {
             Stories result = apiInstance.listStories(storiesBuilder.build());
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
-                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),keywords.get(0));
+                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
+                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
                 articles.add(article);
+                getRelatedPages(article);
+                break;
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
 //                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
 //                System.out.println(story);
@@ -128,8 +131,7 @@ public class Utils {
         }
         return articles;
     }
-
-    public static void getEntities(String query)
+    public static ArrayList<Article> getRelatedPages(Article article)
     {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -143,24 +145,86 @@ public class Utils {
 
         DefaultApi apiInstance = new DefaultApi();
 
-        String type = "dbpedia_resources";
-        String term = query;
-        String language = "en";
-        Integer perPage = 10;
+        RelatedStoriesParams.Builder storiesBuilder = RelatedStoriesParams.newBuilder();
 
-        AutocompletesParams.Builder autocompletesBuilder = AutocompletesParams.newBuilder();
-
-        autocompletesBuilder.setType(type);
-        autocompletesBuilder.setTerm(term);
-        autocompletesBuilder.setLanguage(language);
-        autocompletesBuilder.setPerPage(perPage);
-
+//        storiesBuilder.setText("trump");
+//        storiesBuilder.setEntitiesBodyText(keywords);
+//        storiesBuilder.setSortBy("hotness");
+        storiesBuilder.setLanguage(Arrays.asList("en"));
+//        storiesBuilder.setNotLanguage(Arrays.asList("es", "it"));
+        storiesBuilder.setPublishedAtStart("NOW-30DAYS");
+        storiesBuilder.setPublishedAtEnd("NOW");
+        storiesBuilder.setStoryTitle(article.getHeadline());
+        storiesBuilder.setStoryBody(article.getPreviewText());
+//        storiesBuilder.setEntitiesBodyLinksDbpedia(Arrays.asList(
+//                "http://dbpedia.org/resource/Donald_Trump",
+//                "http://dbpedia.org/resource/Hillary_Rodham_Clinton"
+//        ));
+        ArrayList<Article> relatedArticles = new ArrayList<Article>();
         try {
-            Autocompletes result = apiInstance.listAutocompletes(autocompletesBuilder.build());
-            System.out.println(result);
+            RelatedStories result = apiInstance.listRelatedStories(storiesBuilder.build());
+            for (Iterator i = result.getRelatedStories().iterator(); i.hasNext();){
+                Story story = (Story) i.next();
+                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
+                System.out.println("\n");
+                Article relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
+                relatedArticles.add(relatedArticle);
+                //                System.out.println(story.getTitle()+" / "+story.getSentiment());
+//                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
+//                System.out.println(story);
+            }
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#listAutocompletes");
+            System.err.println("Exception when calling DefaultApi#listRelatedStories");
             e.printStackTrace();
         }
+//        try {
+//            Stories result = apiInstance.listStories(storiesBuilder.build());
+//            for (Iterator i = result.getStories().iterator(); i.hasNext();){
+//                Story story = (Story) i.next();
+//                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),keywords.get(0));
+//                articles.add(article);
+//                //                System.out.println(story.getTitle()+" / "+story.getSentiment());
+////                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
+////                System.out.println(story);
+//            }
+//        } catch (ApiException e) {
+//            System.err.println("Exception when calling DefaultApi#listStories");
+//            e.printStackTrace();
+//        }
+        return relatedArticles;
     }
+//    public static void getEntities(String query)
+//    {
+//        ApiClient defaultClient = Configuration.getDefaultApiClient();
+//
+//        // Configure API key authorization: app_id
+//        ApiKeyAuth app_id = (ApiKeyAuth) defaultClient.getAuthentication("app_id");
+//        app_id.setApiKey(String.valueOf(appId));
+//
+//        // Configure API key authorization: app_key
+//        ApiKeyAuth app_key = (ApiKeyAuth) defaultClient.getAuthentication("app_key");
+//        app_key.setApiKey(String.valueOf(appKey));
+//
+//        DefaultApi apiInstance = new DefaultApi();
+//
+//        String type = "dbpedia_resources";
+//        String term = query;
+//        String language = "en";
+//        Integer perPage = 10;
+//
+//        AutocompletesParams.Builder autocompletesBuilder = AutocompletesParams.newBuilder();
+//
+//        autocompletesBuilder.setType(type);
+//        autocompletesBuilder.setTerm(term);
+//        autocompletesBuilder.setLanguage(language);
+//        autocompletesBuilder.setPerPage(perPage);
+//
+//        try {
+//            Autocompletes result = apiInstance.listAutocompletes(autocompletesBuilder.build());
+//            System.out.println(result);
+//        } catch (ApiException e) {
+//            System.err.println("Exception when calling DefaultApi#listAutocompletes");
+//            e.printStackTrace();
+//        }
+//    }
 }
