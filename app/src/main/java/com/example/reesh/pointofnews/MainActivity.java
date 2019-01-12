@@ -79,16 +79,6 @@ public class MainActivity extends AppCompatActivity {
 //        articles=getArticlesTask.getArticles();
 //        getArticlesTask.execute(searchQuery);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String url=articles.get(position).getUrl();
-                Intent intent=new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                startActivity(intent);
-            }
-        });
-
 
     }
 
