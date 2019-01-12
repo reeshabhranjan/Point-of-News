@@ -4,11 +4,22 @@ public class Article {
     private String url;
     private String headline;
     private String previewText;
-    private double positivePercentage;
-    private double neutralPercentage;
-    private double negativePercentage;
+    private double sentimentPercent;
     private String sentimentVerdict;
+    private String imgPath;
     //TODO add image support
+
+    public Article(String url, String headline, String previewText, double sentimentPercent, String sentimentVerdict) {
+        this.url = url;
+        this.headline = headline;
+        this.previewText = previewText;
+        this.sentimentPercent = sentimentPercent;
+        this.sentimentVerdict = sentimentVerdict;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
 
     public String getUrl() {
         return url;
@@ -22,16 +33,8 @@ public class Article {
         return previewText;
     }
 
-    public double getPositivePercentage() {
-        return positivePercentage;
-    }
-
-    public double getNeutralPercentage() {
-        return neutralPercentage;
-    }
-
-    public double getNegativePercentage() {
-        return negativePercentage;
+    public double getSentimentPercent() {
+        return sentimentPercent;
     }
 
     public String getSentimentVerdict() {
