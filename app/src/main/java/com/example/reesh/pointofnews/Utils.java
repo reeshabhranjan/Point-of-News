@@ -5,7 +5,17 @@ import com.aylien.newsapi.auth.*;
 import com.aylien.newsapi.models.*;
 import com.aylien.newsapi.parameters.*;
 import com.aylien.newsapi.api.DefaultApi;
+import com.aylien.textapi.TextAPIClient;
+import com.aylien.textapi.TextAPIException;
+import com.aylien.textapi.parameters.*;
+import com.aylien.textapi.responses.EntitiesSentiment;
+import com.aylien.textapi.responses.EntitiySentiments;
+import com.aylien.textapi.responses.EntitySentiment;
 
+import org.json.*;
+//import org.json.JSONObject;
+//import org.json.simple.parser.*;
+import java.lang.reflect.Array;
 import java.util.*;
 /**
  * Created by patan on 12-01-2019.
@@ -47,8 +57,11 @@ class Reader {
     }
 }
 public class Utils {
-    private static final String appId="2332d5e9";
-    private final static String appKey="6f0faba6688630b79da379b8dfe4a418";
+    private final static String TextAppId="50531da7";
+    private final static String TextAppKey="139fb706befc1f6de68e428151d2dfab";
+
+    private final static String NewsAppId="2332d5e9";
+    private final static String NewsAppKey="6f0faba6688630b79da379b8dfe4a418";
 
     public static void main(String[] args)throws IOException {
         // TODO Auto-generated method stub
@@ -57,44 +70,112 @@ public class Utils {
         entities.add("Narendra Modi");
         getArticles(entities);
     }
-    private static void temp(String title)
+//    private static void temp(String title)
+//    {
+//        ApiClient defaultClient = Configuration.getDefaultApiClient();
+//
+//        // Configure API key authorization: app_id
+//        ApiKeyAuth app_id = (ApiKeyAuth) defaultClient.getAuthentication("app_id");
+//        app_id.setApiKey(appId);
+//
+//        // Configure API key authorization: app_key
+//        ApiKeyAuth app_key = (ApiKeyAuth) defaultClient.getAuthentication("app_key");
+//        app_key.setApiKey(appKey);
+//
+//        DefaultApi apiInstance = new DefaultApi();
+//        TimeSeriesParams.Builder timeSeriesBuilder = TimeSeriesParams.newBuilder();
+////        timeSeriesBuilder.setEntitiesBodyText(keywords);
+//        timeSeriesBuilder.setText(title);
+//        timeSeriesBuilder.setLanguage(Arrays.asList("en"));
+////        storiesBuilder.setNotLanguage(Arrays.asList("es", "it"));
+//        timeSeriesBuilder.setPublishedAtStart("NOW-7DAYS");
+//        timeSeriesBuilder.setPublishedAtEnd("NOW");
+//        try {
+//            TimeSeriesList result = apiInstance.listTimeSeries(timeSeriesBuilder.build());
+//            System.out.println(result);
+//        } catch (ApiException e) {
+//            System.err.println("Exception when calling DefaultApi#listTimeSeries");
+//            e.printStackTrace();
+//        }
+//    }
+    public static ArrayList<String> entityLevelSentimentAnalysis(String articleBody) throws TextAPIException {
+        TextAPIClient client = new TextAPIClient(TextAppId, TextAppKey);
+        EntityLevelSentimentParams.Builder builder = EntityLevelSentimentParams.newBuilder();
+        builder.setText(articleBody);
+        EntitiesSentiment elsa = client.entityLevelSentiment(builder.build());
+        // System.out.println(elsa.getText());
+        ArrayList<String> output = new ArrayList();
+        for (EntitiySentiments entitySentiment: elsa.getEntitiySentiments()) {
+            // System.out.println(entitySentiment.getTypes());
+            if (entitySentiment.getTypes().equals("Person") || entitySentiment.getTypes().equals("Organisation")){
+                String outstring = entitySentiment.getMentions()[0].getText() + ":" + entitySentiment.getMentions()[0].getSentiment().getPolarity() + ":" + entitySentiment.getMentions()[0].getSentiment().getConfidence();
+                System.out.println(outstring);
+                output.add(outstring);
+            }
+        }
+        return output;
+
+    }
+    public static ArrayList<Article> getArticlesBySentiment(ArrayList<String> keywords, String polarity)
     {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
 
         // Configure API key authorization: app_id
         ApiKeyAuth app_id = (ApiKeyAuth) defaultClient.getAuthentication("app_id");
-        app_id.setApiKey(appId);
+        app_id.setApiKey(String.valueOf(NewsAppId));
 
         // Configure API key authorization: app_key
         ApiKeyAuth app_key = (ApiKeyAuth) defaultClient.getAuthentication("app_key");
-        app_key.setApiKey(appKey);
+        app_key.setApiKey(String.valueOf(NewsAppKey));
 
         DefaultApi apiInstance = new DefaultApi();
-        TimeSeriesParams.Builder timeSeriesBuilder = TimeSeriesParams.newBuilder();
-//        timeSeriesBuilder.setEntitiesBodyText(keywords);
-        timeSeriesBuilder.setText(title);
-        timeSeriesBuilder.setLanguage(Arrays.asList("en"));
+
+        StoriesParams.Builder storiesBuilder = StoriesParams.newBuilder();
+
+//        storiesBuilder.setText("trump");
+        storiesBuilder.setEntitiesBodyText(keywords);
+        storiesBuilder.setSortBy("hotness");
+        storiesBuilder.setLanguage(Arrays.asList("en"));
 //        storiesBuilder.setNotLanguage(Arrays.asList("es", "it"));
-        timeSeriesBuilder.setPublishedAtStart("NOW-7DAYS");
-        timeSeriesBuilder.setPublishedAtEnd("NOW");
+        storiesBuilder.setPublishedAtStart("NOW-7DAYS");
+        storiesBuilder.setPublishedAtEnd("NOW");
+        storiesBuilder.setSentimentBodyPolarity(polarity);
+//        storiesBuilder.setEntitiesBodyLinksDbpedia(Arrays.asList(
+//                "http://dbpedia.org/resource/Donald_Trump",
+//                "http://dbpedia.org/resource/Hillary_Rodham_Clinton"
+//        ));
+        ArrayList<Article> articles = new ArrayList<Article>();
         try {
-            TimeSeriesList result = apiInstance.listTimeSeries(timeSeriesBuilder.build());
-            System.out.println(result);
+            Stories result = apiInstance.listStories(storiesBuilder.build());
+            for (Iterator i = result.getStories().iterator(); i.hasNext();){
+                Story story = (Story) i.next();
+//                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
+                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
+//                articles.add(article);
+                getRelatedPages(article);
+//                System.out.println(story.getTitle()+story.getSummary().getSentences()+"\n\n\n\n");
+//                System.out.println(story);
+                break;
+                //                System.out.println(story.getTitle()+" / "+story.getSentiment());
+//                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
+//                System.out.println(story);
+            }
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#listTimeSeries");
+            System.err.println("Exception when calling DefaultApi#listStories");
             e.printStackTrace();
         }
+        return articles;
     }
     public static ArrayList<Article> getArticles(ArrayList<String> keywords) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
 
         // Configure API key authorization: app_id
         ApiKeyAuth app_id = (ApiKeyAuth) defaultClient.getAuthentication("app_id");
-        app_id.setApiKey(String.valueOf(appId));
+        app_id.setApiKey(String.valueOf(NewsAppId));
 
         // Configure API key authorization: app_key
         ApiKeyAuth app_key = (ApiKeyAuth) defaultClient.getAuthentication("app_key");
-        app_key.setApiKey(String.valueOf(appKey));
+        app_key.setApiKey(String.valueOf(NewsAppKey));
 
         DefaultApi apiInstance = new DefaultApi();
 
@@ -116,16 +197,20 @@ public class Utils {
             Stories result = apiInstance.listStories(storiesBuilder.build());
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
-                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
+//                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
                 Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
-                articles.add(article);
+//                articles.add(article);
+                entityLevelSentimentAnalysis(story.getBody().toString());
+//                System.out.println(story);
+                break;
 //                getRelatedPages(article);
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
 //                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
-//                System.out.println(story);
             }
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#listStories");
+            e.printStackTrace();
+        } catch (TextAPIException e) {
             e.printStackTrace();
         }
         return articles;
@@ -136,11 +221,11 @@ public class Utils {
 
         // Configure API key authorization: app_id
         ApiKeyAuth app_id = (ApiKeyAuth) defaultClient.getAuthentication("app_id");
-        app_id.setApiKey(String.valueOf(appId));
+        app_id.setApiKey(String.valueOf(NewsAppId));
 
         // Configure API key authorization: app_key
         ApiKeyAuth app_key = (ApiKeyAuth) defaultClient.getAuthentication("app_key");
-        app_key.setApiKey(String.valueOf(appKey));
+        app_key.setApiKey(String.valueOf(NewsAppKey));
 
         DefaultApi apiInstance = new DefaultApi();
 
