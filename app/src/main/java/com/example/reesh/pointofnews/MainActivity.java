@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private static Context context;
+    private static Context applicationContext;
     private ArrayList<Article> articles;
     private GetArticlesTask getArticlesTask;
     private ArrayList<String> searchQuery;
@@ -29,11 +31,16 @@ public class MainActivity extends AppCompatActivity {
         return context;
     }
 
+    public static Context getCurrentApplicationContext() {
+        return applicationContext;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        context=getApplicationContext();
         context=MainActivity.this;
+        applicationContext=getApplicationContext();
         setContentView(R.layout.activity_main);
         final SearchView searchView=(SearchView)findViewById(R.id.searchView);
         final ListView listView=(ListView)findViewById(R.id.listView);
@@ -60,9 +67,10 @@ public class MainActivity extends AppCompatActivity {
                 searchQuery= new ArrayList<String> (Arrays.asList(searchView.getQuery().toString().split("\\+")));
                 getArticlesTask=new GetArticlesTask();
                 getArticlesTask.setListView(listView);
-                ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
-                getArticlesTask.setArticleAdapter(articleAdapter);
+//                ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
+//                getArticlesTask.setArticleAdapter(articleAdapter);
                 articles=getArticlesTask.getArticles();
+                Toast.makeText(MainActivity.this, "Retrieving news articles", Toast.LENGTH_LONG).show();
                 getArticlesTask.execute(searchQuery);
                 return true;
             }
@@ -81,9 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void download(String url,String name){
+    public static void downloadArticleImages(ArrayList<Article> articles){
+
+    }
+
+    public static void download(String url,String name){
         final String name2=name;
-        Picasso.with(MainActivity.getContext())
+        Picasso.with(MainActivity.getCurrentApplicationContext())
                 .load(url)
                 .into(new Target() {
                     @Override
@@ -98,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                            String name="hello2.jpg";
                             myDir=new File(myDir,name2);
+                            System.out.println("Saved: "+name2);
                             FileOutputStream out=new FileOutputStream(myDir);
                             bitmap.compress(Bitmap.CompressFormat.JPEG,90,out);
                             out.flush();
