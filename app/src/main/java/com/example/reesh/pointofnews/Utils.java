@@ -1,4 +1,7 @@
 package com.example.reesh.pointofnews;
+import android.os.Build;
+import android.os.Environment;
+
 import com.aylien.newsapi.*;
 import com.aylien.newsapi.auth.*;
 import com.aylien.newsapi.models.*;
@@ -6,6 +9,10 @@ import com.aylien.newsapi.parameters.*;
 import com.aylien.newsapi.api.DefaultApi;
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 /**
  * Created by patan on 12-01-2019.
@@ -129,8 +136,16 @@ public class Utils {
     }
     public void downloadImg(String imgURL)
     {
-        Picasso.with()
-    }
+        try(InputStream in = new URL(imgURL).openStream()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Files.copy(in, Paths.get(Environment.getExternalStorageDirectory().toString()));
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     public static void getEntities(String query)
     {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
