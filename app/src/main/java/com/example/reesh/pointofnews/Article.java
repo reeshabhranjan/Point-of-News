@@ -8,6 +8,7 @@ public class Article {
     private String sentimentVerdict;
     private String imageName;
     private String imageURL;
+    private int verdictLogoResourceId;
     //TODO add image support
 
     public Article(String url, String headline, String previewText, double sentimentPercent, String sentimentVerdict, String imageURL, String imageName) {
@@ -20,7 +21,15 @@ public class Article {
         this.imageName=imageName;
     }
 
-//    public void setImgPath(String imageName) {
+    public int getVerdictLogoResourceId() {
+        return verdictLogoResourceId;
+    }
+
+    public void setVerdictLogoResourceId(int verdictLogoResourceId) {
+        this.verdictLogoResourceId = verdictLogoResourceId;
+    }
+
+    //    public void setImgPath(String imageName) {
 //        this.imageName = imageName;
 //    }
 

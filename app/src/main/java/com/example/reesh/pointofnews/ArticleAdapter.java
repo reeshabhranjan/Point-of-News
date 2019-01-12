@@ -33,8 +33,12 @@ public class ArticleAdapter extends ArrayAdapter {
         }
 
         Article article=(Article) objects.get(position);
+
         TextView headlineTextView=articleView.findViewById(R.id.headlineTextView);
         TextView previewTextView=articleView.findViewById(R.id.previewTextView);
+
+        headlineTextView.setText(article.getHeadline());
+        previewTextView.setText(article.getPreviewText());
         //TODO set analysis icon
 
         return articleView;
