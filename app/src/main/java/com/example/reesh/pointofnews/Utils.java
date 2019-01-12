@@ -1,18 +1,11 @@
 package com.example.reesh.pointofnews;
-import android.os.Build;
-import android.os.Environment;
 
 import com.aylien.newsapi.*;
 import com.aylien.newsapi.auth.*;
 import com.aylien.newsapi.models.*;
 import com.aylien.newsapi.parameters.*;
 import com.aylien.newsapi.api.DefaultApi;
-import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 /**
  * Created by patan on 12-01-2019.
@@ -92,7 +85,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
-    private static void getArticles(ArrayList<String> keywords) {
+    private static ArrayList<Article> getArticles(ArrayList<String> keywords) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
 
         // Configure API key authorization: app_id
@@ -118,33 +111,23 @@ public class Utils {
 //                "http://dbpedia.org/resource/Donald_Trump",
 //                "http://dbpedia.org/resource/Hillary_Rodham_Clinton"
 //        ));
-
+        ArrayList<Article> articles = new ArrayList<Article>();
         try {
             Stories result = apiInstance.listStories(storiesBuilder.build());
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
-                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString());
-
+                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),keywords.get(0));
+                articles.add(article);
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
 //                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
-                System.out.println(story);
+//                System.out.println(story);
             }
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#listStories");
             e.printStackTrace();
         }
+        return articles;
     }
-    public void downloadImg(String imgURL)
-    {
-        try(InputStream in = new URL(imgURL).openStream()){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Files.copy(in, Paths.get(Environment.getExternalStorageDirectory().toString()));
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     public static void getEntities(String query)
     {
