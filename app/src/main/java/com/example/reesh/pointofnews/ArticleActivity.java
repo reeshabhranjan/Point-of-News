@@ -23,7 +23,7 @@ public class ArticleActivity extends AppCompatActivity {
         final Article selectedArticle= (Article) intent.getExtras().get("article");
         ListView listView=(ListView)findViewById(R.id.listView);
 
-        GetArticlesTask getRelatedArticlesTask=new GetArticlesTask();
+        GetArticlesTask getRelatedArticlesTask=new GetArticlesTask(GetArticlesTask.SEARCH_BY_ARTICLE);
         getRelatedArticlesTask.setListView(listView);
         getRelatedArticlesTask.setBaseArticle(selectedArticle);
         getRelatedArticlesTask.setCurrentContext(this);

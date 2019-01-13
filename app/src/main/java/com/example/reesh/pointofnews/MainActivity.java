@@ -1,12 +1,14 @@
 package com.example.reesh.pointofnews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Article> articles;
     private GetArticlesTask getArticlesTask;
     private ArrayList<String> searchQuery;
+    private Button positiveFilterButton;
+    private Button neutralFilterButton;
+    private Button negativeFilterButton;
 
     public static Context getContext() {
         return context;
@@ -44,6 +49,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final SearchView searchView=(SearchView)findViewById(R.id.searchView);
         final ListView listView=(ListView)findViewById(R.id.listView);
+
+        positiveFilterButton=(Button)findViewById(R.id.positiveFilterButton);
+        neutralFilterButton=(Button)findViewById(R.id.neutralFilterButton);
+        negativeFilterButton=(Button)findViewById(R.id.negativeFilterButton);
+
+        positiveFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,FilteredArticleActivity.class);
+                intent.putExtra("query",searchQuery);
+                intent.putExtra("filterType",GetArticlesTask.showPositive);
+                startActivity(intent);
+            }
+        });
+
+        negativeFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,FilteredArticleActivity.class);
+                intent.putExtra("query",searchQuery);
+                intent.putExtra("filterType",GetArticlesTask.showNegative);
+                startActivity(intent);
+            }
+        });
+
+        neutralFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,FilteredArticleActivity.class);
+                intent.putExtra("query",searchQuery);
+                intent.putExtra("filterType",GetArticlesTask.showNeutral);
+                startActivity(intent);
+            }
+        });
 
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchQuery= new ArrayList<String> (Arrays.asList(searchView.getQuery().toString().split("\\+")));
-                getArticlesTask=new GetArticlesTask();
+                getArticlesTask=new GetArticlesTask(GetArticlesTask.SEARCH_BY_QUERY);
                 getArticlesTask.setCurrentContext(getContext());
                 getArticlesTask.setListView(listView);
 //                ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);

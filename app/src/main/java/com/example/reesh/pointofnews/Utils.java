@@ -151,11 +151,11 @@ public class Utils {
                 Story story = (Story) i.next();
 //                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
                 Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
-//                articles.add(article);
-                getRelatedPages(article);
+                articles.add(article);
+//                getRelatedPages(article);
 //                System.out.println(story.getTitle()+story.getSummary().getSentences()+"\n\n\n\n");
 //                System.out.println(story);
-                break;
+//                break;
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
 //                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
 //                System.out.println(story);

@@ -20,6 +20,25 @@ public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
 //        this.articleAdapter = articleAdapter;
 //    }
 
+    public final static int SEARCH_BY_QUERY=0;
+    public final static int SEARCH_BY_ARTICLE=1;
+    public final static int SEARCH_BY_FILTER=2;
+
+    public final static String showPositive="positive";
+    public final static String showNeutral="neutral";
+    public final static String showNegative="negative";
+
+    private int searchType;
+    private String filterType;
+
+    public GetArticlesTask(int searchType) {
+        this.searchType = searchType;
+    }
+
+    public void setFilterType(String filterType) {
+        this.filterType = filterType;
+    }
+
     private Context currentContext;
 
     public void setCurrentContext(Context currentContext) {
@@ -47,12 +66,28 @@ public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
     protected ArrayList doInBackground(ArrayList... arrayLists) {
         ArrayList<String> query=arrayLists[0];
 
-        if(baseArticle==null){
-            articles=Utils.getArticles(query);
+        switch (searchType){
+
+            case SEARCH_BY_QUERY:
+                articles=Utils.getArticles(query);
+                break;
+
+            case SEARCH_BY_ARTICLE:
+                articles=Utils.getRelatedPages(baseArticle);
+                break;
+
+            case SEARCH_BY_FILTER:
+                articles=Utils.getArticlesBySentiment(query,filterType);
+                System.out.println("/n/n/n/nGet Articles by sentiment/n/n/n/n");
+                break;
         }
-        else{
-            articles=Utils.getRelatedPages(baseArticle);
-        }
+
+//        if(baseArticle==null){
+//            articles=Utils.getArticles(query);
+//        }
+//        else{
+//            articles=Utils.getRelatedPages(baseArticle);
+//        }
         return articles;
     }
 
