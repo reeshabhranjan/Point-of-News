@@ -16,6 +16,8 @@ import org.json.*;
 //import org.json.JSONObject;
 //import org.json.simple.parser.*;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 /**
  * Created by patan on 12-01-2019.
@@ -101,7 +103,11 @@ public class Utils {
     public static ArrayList<String> entityLevelSentimentAnalysis(Article article) throws TextAPIException {
         TextAPIClient client = new TextAPIClient(TextAppId, TextAppKey);
         EntityLevelSentimentParams.Builder builder = EntityLevelSentimentParams.newBuilder();
-        builder.setText(article.getBody());
+        try {
+            builder.setUrl(new URL(article.getUrl()));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         EntitiesSentiment elsa = client.entityLevelSentiment(builder.build());
         // System.out.println(elsa.getText());
         ArrayList<String> output = new ArrayList();
