@@ -8,10 +8,15 @@
 
     <TextView
         android:id="@+id/headlineTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="36dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:maxEms="30"
+        android:maxLines="2"
+        android:scrollHorizontally="true"
+        android:singleLine="false"
         android:text="Headline comes here"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +25,7 @@
     <TextView
         android:id="@+id/previewTextView"
         android:layout_width="206dp"
-        android:layout_height="42dp"
+        android:layout_height="65dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
@@ -54,10 +59,21 @@
         android:layout_marginBottom="8dp"
         android:divider="@color/colorPrimaryDark"
         android:dividerHeight="5dp"
+        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previewTextView"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Related articles:"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/previewTextView" />
 
 </android.support.constraint.ConstraintLayout>
