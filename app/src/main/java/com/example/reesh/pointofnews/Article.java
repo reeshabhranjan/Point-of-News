@@ -110,7 +110,5 @@ public class Article implements Parcelable {
         dest.writeInt(verdictLogoResourceId);
     }
 
-    public String getBody() {
-        return null;
-    }
+
 }
