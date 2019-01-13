@@ -12,9 +12,10 @@ public class Article implements Parcelable {
     private String imageName;
     private String imageURL;
     private int verdictLogoResourceId;
+    private String body;
     //TODO add image support
 
-    public Article(String url, String headline, String previewText, double sentimentPercent, String sentimentVerdict, String imageURL, String imageName) {
+    public Article(String url, String headline, String previewText, double sentimentPercent, String sentimentVerdict, String imageURL, String imageName, String body) {
         this.url = url;
         this.headline = headline;
         this.previewText = previewText;
@@ -22,6 +23,7 @@ public class Article implements Parcelable {
         this.sentimentVerdict = sentimentVerdict;
         this.imageURL=imageURL;
         this.imageName=imageName;
+        this.body=body;
     }
 
     protected Article(Parcel in) {
@@ -46,6 +48,10 @@ public class Article implements Parcelable {
             return new Article[size];
         }
     };
+
+    public String getBody(){
+        return body;
+    }
 
     public String getImageName() {
         return imageName;

@@ -68,7 +68,7 @@ public class Utils {
         Reader.init(System.in);
         ArrayList<String> entities = new ArrayList<>();
         entities.add("Narendra Modi");
-        getArticles(entities);
+        getArticlesBySentiment(entities,"positive");
     }
 //    private static void temp(String title)
 //    {
@@ -98,10 +98,10 @@ public class Utils {
 //            e.printStackTrace();
 //        }
 //    }
-    public static ArrayList<String> entityLevelSentimentAnalysis(String articleBody) throws TextAPIException {
+    public static ArrayList<String> entityLevelSentimentAnalysis(Article article) throws TextAPIException {
         TextAPIClient client = new TextAPIClient(TextAppId, TextAppKey);
         EntityLevelSentimentParams.Builder builder = EntityLevelSentimentParams.newBuilder();
-        builder.setText(articleBody);
+        builder.setText(article.getBody());
         EntitiesSentiment elsa = client.entityLevelSentiment(builder.build());
         // System.out.println(elsa.getText());
         ArrayList<String> output = new ArrayList();
@@ -150,7 +150,7 @@ public class Utils {
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
 //                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
-                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
+                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
                 articles.add(article);
 //                getRelatedPages(article);
 //                System.out.println(story.getTitle()+story.getSummary().getSentences()+"\n\n\n\n");
@@ -197,8 +197,8 @@ public class Utils {
             Stories result = apiInstance.listStories(storiesBuilder.build());
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
-                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
-                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
+//                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
+                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
                 articles.add(article);
 //                getRelatedPages(article);
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
@@ -247,7 +247,7 @@ public class Utils {
                 Story story = (Story) i.next();
                 System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
                 System.out.println("\n");
-                Article relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"");
+                Article relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
                 relatedArticles.add(relatedArticle);
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
 //                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());
