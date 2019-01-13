@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 articles=getArticlesTask.getArticles();
                 Toast.makeText(MainActivity.this, "Retrieving news articles", Toast.LENGTH_LONG).show();
                 getArticlesTask.execute(searchQuery);
+                searchView.setQueryHint(query);
                 return true;
             }
 
