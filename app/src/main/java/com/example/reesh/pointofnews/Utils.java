@@ -16,6 +16,8 @@ import org.json.*;
 //import org.json.JSONObject;
 //import org.json.simple.parser.*;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 /**
  * Created by patan on 12-01-2019.
@@ -68,7 +70,13 @@ public class Utils {
         Reader.init(System.in);
         ArrayList<String> entities = new ArrayList<>();
         entities.add("Narendra Modi");
-        getArticlesBySentiment(entities,"positive");
+//        getArticlesBySentiment(entities,"positive");
+        ArrayList<Article> articles = getArticlesBySentiment(entities,"positive");
+        try {
+            entityLevelSentimentAnalysis(articles.get(0));
+        } catch (TextAPIException e) {
+            e.printStackTrace();
+        }
     }
 //    private static void temp(String title)
 //    {
@@ -101,15 +109,20 @@ public class Utils {
     public static ArrayList<String> entityLevelSentimentAnalysis(Article article) throws TextAPIException {
         TextAPIClient client = new TextAPIClient(TextAppId, TextAppKey);
         EntityLevelSentimentParams.Builder builder = EntityLevelSentimentParams.newBuilder();
-        builder.setText(article.getBody());
+        try {
+            System.out.println(article.getUrl());
+            builder.setUrl(new URL(article.getUrl()));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         EntitiesSentiment elsa = client.entityLevelSentiment(builder.build());
         // System.out.println(elsa.getText());
         ArrayList<String> output = new ArrayList();
         for (EntitiySentiments entitySentiment: elsa.getEntitiySentiments()) {
-            // System.out.println(entitySentiment.getTypes());
-            if ((entitySentiment.getTypes().equals("Person") || entitySentiment.getTypes().equals("Organisation"))&&!(entitySentiment.getMentions()[0].getSentiment().getPolarity().equals("neutral"))){
-                String outstring = entitySentiment.getMentions()[0].getText() + ":" + entitySentiment.getMentions()[0].getSentiment().getPolarity() + ":" + entitySentiment.getMentions()[0].getSentiment().getConfidence();
-                System.out.println(outstring);
+//             System.out.println(entitySentiment.getTypes());
+            if ((entitySentiment.getTypes().equals("Person") || entitySentiment.getTypes().equals("Organisation"))){
+                String outstring = entitySentiment.getMentions()[0].getText() + ":" + entitySentiment.getMentions()[0].getSentiment().getPolarity();
+//                System.out.println(outstring);
                 output.add(outstring);
             }
         }
