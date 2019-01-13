@@ -1,6 +1,9 @@
 package com.example.reesh.pointofnews;
 
-public class Article {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Article implements Parcelable {
     private String url;
     private String headline;
     private String previewText;
@@ -20,6 +23,29 @@ public class Article {
         this.imageURL=imageURL;
         this.imageName=imageName;
     }
+
+    protected Article(Parcel in) {
+        url = in.readString();
+        headline = in.readString();
+        previewText = in.readString();
+        sentimentPercent = in.readDouble();
+        sentimentVerdict = in.readString();
+        imageName = in.readString();
+        imageURL = in.readString();
+        verdictLogoResourceId = in.readInt();
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
 
     public String getImageName() {
         return imageName;
@@ -59,5 +85,22 @@ public class Article {
 
     public String getSentimentVerdict() {
         return sentimentVerdict;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(url);
+        dest.writeString(headline);
+        dest.writeString(previewText);
+        dest.writeDouble(sentimentPercent);
+        dest.writeString(sentimentVerdict);
+        dest.writeString(imageName);
+        dest.writeString(imageURL);
+        dest.writeInt(verdictLogoResourceId);
     }
 }

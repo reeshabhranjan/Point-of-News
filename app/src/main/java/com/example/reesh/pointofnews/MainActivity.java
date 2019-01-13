@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 searchQuery= new ArrayList<String> (Arrays.asList(searchView.getQuery().toString().split("\\+")));
                 getArticlesTask=new GetArticlesTask();
+                getArticlesTask.setCurrentContext(getContext());
                 getArticlesTask.setListView(listView);
 //                ArticleAdapter articleAdapter=new ArticleAdapter(MainActivity.getContext(),R.layout.news_item,articles);
 //                getArticlesTask.setArticleAdapter(articleAdapter);

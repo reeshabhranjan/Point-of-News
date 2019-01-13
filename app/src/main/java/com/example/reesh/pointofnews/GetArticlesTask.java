@@ -1,5 +1,6 @@
 package com.example.reesh.pointofnews;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,6 +20,18 @@ public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
 //        this.articleAdapter = articleAdapter;
 //    }
 
+    private Context currentContext;
+
+    public void setCurrentContext(Context currentContext) {
+        this.currentContext = currentContext;
+    }
+
+    private Article baseArticle=null;
+
+    public void setBaseArticle(Article baseArticle) {
+        this.baseArticle = baseArticle;
+    }
+
     public ArrayList<Article> getArticles() {
         return articles;
     }
@@ -33,7 +46,13 @@ public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
     @Override
     protected ArrayList doInBackground(ArrayList... arrayLists) {
         ArrayList<String> query=arrayLists[0];
-        articles=Utils.getArticles(query);
+
+        if(baseArticle==null){
+            articles=Utils.getArticles(query);
+        }
+        else{
+            articles=Utils.getRelatedPages(baseArticle);
+        }
         return articles;
     }
 
@@ -68,10 +87,16 @@ public class GetArticlesTask extends AsyncTask<ArrayList,Void,ArrayList> {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String url=articles.get(position).getUrl();
-                Intent intent=new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                MainActivity.getContext().startActivity(intent);
+//                String url=articles.get(position).getUrl();
+//                Intent intent=new Intent(Intent.ACTION_VIEW);
+//                intent.setData(Uri.parse(url));
+//                MainActivity.getContext().startActivity(intent);
+
+                Article article=articles.get(position);
+                Intent intent=new Intent(currentContext,ArticleActivity.class);
+                intent.putExtra("article",article);
+                currentContext.startActivity(intent);
+
             }
         });
     }
