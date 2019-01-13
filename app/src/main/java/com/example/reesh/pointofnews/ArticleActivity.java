@@ -37,7 +37,7 @@ public class ArticleActivity extends AppCompatActivity {
         LinearLayout linearLayout=(LinearLayout)findViewById(R.id.linearLayout);
         FetchEntityVerdictTask fetchEntityVerdictTask=new FetchEntityVerdictTask();
         fetchEntityVerdictTask.setLinearLayout(linearLayout);
-        fetchEntityVerdictTask.execute(selectedArticle);
+//        fetchEntityVerdictTask.execute(selectedArticle);
 
 
         GetArticlesTask getRelatedArticlesTask=new GetArticlesTask(GetArticlesTask.SEARCH_BY_ARTICLE);
