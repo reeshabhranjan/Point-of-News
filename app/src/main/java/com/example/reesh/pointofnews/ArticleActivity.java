@@ -34,9 +34,9 @@ public class ArticleActivity extends AppCompatActivity {
         final Article selectedArticle= (Article) intent.getExtras().get("article");
         ListView listView=(ListView)findViewById(R.id.listView);
 //        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
-        LinearLayout linearLayout=(LinearLayout)findViewById(R.id.linearLayout);
-        FetchEntityVerdictTask fetchEntityVerdictTask=new FetchEntityVerdictTask();
-        fetchEntityVerdictTask.setLinearLayout(linearLayout);
+//        LinearLayout linearLayout=(LinearLayout)findViewById(R.id.linearLayout);
+//        FetchEntityVerdictTask fetchEntityVerdictTask=new FetchEntityVerdictTask();
+//        fetchEntityVerdictTask.setLinearLayout(linearLayout);
 //        fetchEntityVerdictTask.execute(selectedArticle);
 
 
