@@ -98,17 +98,17 @@ public class Utils {
 //            e.printStackTrace();
 //        }
 //    }
-    public static ArrayList<String> entityLevelSentimentAnalysis(String articleBody) throws TextAPIException {
+    public static ArrayList<String> entityLevelSentimentAnalysis(Article article) throws TextAPIException {
         TextAPIClient client = new TextAPIClient(TextAppId, TextAppKey);
         EntityLevelSentimentParams.Builder builder = EntityLevelSentimentParams.newBuilder();
-        builder.setText(articleBody);
+        builder.setText(article.toString());
         EntitiesSentiment elsa = client.entityLevelSentiment(builder.build());
         // System.out.println(elsa.getText());
         ArrayList<String> output = new ArrayList();
         for (EntitiySentiments entitySentiment: elsa.getEntitiySentiments()) {
             // System.out.println(entitySentiment.getTypes());
             if (entitySentiment.getTypes().equals("Person") || entitySentiment.getTypes().equals("Organisation")){
-                String outstring = entitySentiment.getMentions()[0].getText() + ":" + entitySentiment.getMentions()[0].getSentiment().getPolarity() + ":" + entitySentiment.getMentions()[0].getSentiment().getConfidence();
+                String outstring = entitySentiment.getMentions()[0].getText() + ":" + entitySentiment.getMentions()[0].getSentiment().getPolarity();
                 System.out.println(outstring);
                 output.add(outstring);
             }

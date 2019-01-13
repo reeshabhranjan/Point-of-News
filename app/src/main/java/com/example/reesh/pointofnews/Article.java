@@ -103,4 +103,8 @@ public class Article implements Parcelable {
         dest.writeString(imageURL);
         dest.writeInt(verdictLogoResourceId);
     }
+
+    public String getBody() {
+        return null;
+    }
 }
