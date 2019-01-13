@@ -163,7 +163,25 @@ public class Utils {
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
 //                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
-                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                boolean hasSummary = story.getSummary().getSentences().size() !=0 ;
+                boolean hasImageURL = story.getMedia().size() != 0;
+                Article article;
+                if(hasSummary && hasImageURL)
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else if(hasSummary)
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else if(hasImageURL)
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),System.currentTimeMillis()+"",story.getBody());
+                }
                 articles.add(article);
 //                getRelatedPages(article);
 //                System.out.println(story.getTitle()+story.getSummary().getSentences()+"\n\n\n\n");
@@ -211,7 +229,25 @@ public class Utils {
             for (Iterator i = result.getStories().iterator(); i.hasNext();){
                 Story story = (Story) i.next();
 //                System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
-                Article article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                boolean hasSummary = story.getSummary().getSentences().size() !=0 ;
+                boolean hasImageURL = story.getMedia().size() != 0;
+                Article article;
+                if(hasSummary && hasImageURL)
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else if(hasSummary)
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else if(hasImageURL)
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else
+                {
+                    article = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),System.currentTimeMillis()+"",story.getBody());
+                }
                 articles.add(article);
 //                getRelatedPages(article);
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
@@ -260,7 +296,25 @@ public class Utils {
                 Story story = (Story) i.next();
                 System.out.println(story.getLinks().getPermalink()+" / "+story.getTitle()+" / "+story.getSummary().getSentences().get(0)+" / "+story.getSentiment().getBody().getScore()+" / "+story.getSentiment().getBody().getPolarity().toString()+" / "+story.getMedia().get(0).getUrl()+" / "+System.currentTimeMillis()+"");
                 System.out.println("\n");
-                Article relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                boolean hasSummary = story.getSummary().getSentences().size() !=0 ;
+                boolean hasImageURL = story.getMedia().size() != 0;
+                Article relatedArticle;
+                if(hasSummary && hasImageURL)
+                {
+                    relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else if(hasSummary)
+                {
+                    relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSummary().getSentences().get(0),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else if(hasImageURL)
+                {
+                    relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),story.getMedia().get(0).getUrl(),System.currentTimeMillis()+"",story.getBody());
+                }
+                else
+                {
+                    relatedArticle = new Article(story.getLinks().getPermalink(),story.getTitle(),story.getSentiment().getBody().getScore(),story.getSentiment().getBody().getPolarity().toString(),System.currentTimeMillis()+"",story.getBody());
+                }
                 relatedArticles.add(relatedArticle);
                 //                System.out.println(story.getTitle()+" / "+story.getSentiment());
 //                System.out.println(story.getTitle() + " / " + story.getSource().getName() +" / "+ story.getMedia().get(0),story.getSentiment().getBody().getPolarity());

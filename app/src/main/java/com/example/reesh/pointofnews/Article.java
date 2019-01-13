@@ -26,6 +26,39 @@ public class Article implements Parcelable {
         this.body=body;
     }
 
+    public Article(String url, String headline, double sentimentPercent, String sentimentVerdict, String imageURL, String imageName, String body) {
+        this.url = url;
+        this.headline = headline;
+//        this.previewText = previewText;
+        this.sentimentPercent = sentimentPercent;
+        this.sentimentVerdict = sentimentVerdict;
+        this.imageURL=imageURL;
+        this.imageName=imageName;
+        this.body=body;
+    }
+
+    public Article(String url, String headline, String previewText, double sentimentPercent, String sentimentVerdict, String imageName, String body) {
+        this.url = url;
+        this.headline = headline;
+        this.previewText = previewText;
+        this.sentimentPercent = sentimentPercent;
+        this.sentimentVerdict = sentimentVerdict;
+//        this.imageURL=imageURL;
+        this.imageName=imageName;
+        this.body=body;
+    }
+
+    public Article(String url, String headline, double sentimentPercent, String sentimentVerdict, String imageName, String body) {
+        this.url = url;
+        this.headline = headline;
+//        this.previewText = previewText;
+        this.sentimentPercent = sentimentPercent;
+        this.sentimentVerdict = sentimentVerdict;
+//        this.imageURL=imageURL;
+        this.imageName=imageName;
+        this.body=body;
+    }
+
     protected Article(Parcel in) {
         url = in.readString();
         headline = in.readString();
