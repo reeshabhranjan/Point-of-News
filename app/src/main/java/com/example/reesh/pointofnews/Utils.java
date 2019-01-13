@@ -107,7 +107,7 @@ public class Utils {
         ArrayList<String> output = new ArrayList();
         for (EntitiySentiments entitySentiment: elsa.getEntitiySentiments()) {
             // System.out.println(entitySentiment.getTypes());
-            if (entitySentiment.getTypes().equals("Person") || entitySentiment.getTypes().equals("Organisation")){
+            if ((entitySentiment.getTypes().equals("Person") || entitySentiment.getTypes().equals("Organisation"))&&!(entitySentiment.getMentions()[0].getSentiment().getPolarity().equals("neutral"))){
                 String outstring = entitySentiment.getMentions()[0].getText() + ":" + entitySentiment.getMentions()[0].getSentiment().getPolarity() + ":" + entitySentiment.getMentions()[0].getSentiment().getConfidence();
                 System.out.println(outstring);
                 output.add(outstring);
