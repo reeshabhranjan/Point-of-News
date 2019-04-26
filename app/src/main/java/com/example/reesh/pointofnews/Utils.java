@@ -59,11 +59,11 @@ class Reader {
     }
 }
 public class Utils {
-    private final static String TextAppId="50531da7";
-    private final static String TextAppKey="139fb706befc1f6de68e428151d2dfab";
+    private final static String TextAppId="20057b6e";
+    private final static String TextAppKey="cf9def785eae1d35f99fb8112f7c5832";
 
-    private final static String NewsAppId="2332d5e9";
-    private final static String NewsAppKey="6f0faba6688630b79da379b8dfe4a418";
+    private final static String NewsAppId="0aa9b23e";
+    private final static String NewsAppKey="87093f95a17b4ae463cc2996e8f8315e";
 
     public static void main(String[] args)throws IOException {
         // TODO Auto-generated method stub
